@@ -41,7 +41,8 @@ def plot_reflectivity_gallery(
     elif output == "save":
         plt.savefig("reflectivity_comparison_gallery.svg")
 
-    plt.close()
+
+# plt.close()
 
 
 def plot_reflectivity(q_vector, intensity_vector, output="none", xlabel=1, ylabel=1):
@@ -96,8 +97,7 @@ def plot_thickness_vs_time(time_vector, thickness, output="show"):
         plt.show()
     elif output == "save":
         plt.savefig("film_thickness.svg")
-
-    plt.close()
+        plt.close()
 
 
 def plot_roughness_vs_time(time_vector, roughness, output="show"):
@@ -114,8 +114,7 @@ def plot_roughness_vs_time(time_vector, roughness, output="show"):
         plt.show()
     elif output == "save":
         plt.savefig("film_roughness.svg")
-
-    plt.close()
+        plt.close()
 
 
 def plot_SLD_vs_time(time_vector, scattering_length_density, output="show"):
@@ -132,5 +131,4 @@ def plot_SLD_vs_time(time_vector, scattering_length_density, output="show"):
         plt.show()
     elif output == "save":
         plt.savefig("film_SLD.svg")
-
-    plt.close()
+        plt.close()
