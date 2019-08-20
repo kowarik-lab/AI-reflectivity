@@ -34,7 +34,7 @@ Please run first `generate_training_data.py` and `training.py` after that.
 ```
 
 #### using jupyter notebook
-Pleas run (jupyter)[https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html] inside the `notebooks` directory and use `prediction_demo.ipynb`
+Pleas run [jupyter](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/execute.html) inside the `notebooks` directory and use `prediction_demo.ipynb`
 
 ### Config file entries
 TODO: Explain structure of config file
