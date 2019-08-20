@@ -4,12 +4,12 @@ from matplotlib import pyplot as plt
 
 def multilayer_reflectivity(q, thickness_layer, roughness_interface, SLD_layer):
     if len(thickness_layer) != len(SLD_layer):
-        raise ValueError('number of thicknesses must be equal to number of SLDs')
+        raise ValueError("number of thicknesses must be equal to number of SLDs")
 
     if len(roughness_interface) == len(SLD_layer):
         number_of_interfaces = len(roughness_interface)
     else:
-        raise ValueError('number of roughnesses must be equal to number of SLDs')
+        raise ValueError("number of roughnesses must be equal to number of SLDs")
 
     k_z0 = q / 2
 
@@ -26,14 +26,16 @@ def multilayer_reflectivity(q, thickness_layer, roughness_interface, SLD_layer):
             thickness_prev_layer = thickness_air
             k_z_previous_layer = _get_k_z(k_z0, SLD_air)
         else:
-            thickness_prev_layer = thickness_layer[prev_layer] * np.ones_like(q, 'd')
+            thickness_prev_layer = thickness_layer[prev_layer] * np.ones_like(q, "d")
             k_z_previous_layer = _get_k_z(k_z0, SLD_layer[prev_layer])
 
         k_z_next_layer = _get_k_z(k_z0, SLD_layer[next_layer])
 
-        current_roughness = roughness_interface[interface] * np.ones_like(q, 'd')
+        current_roughness = roughness_interface[interface] * np.ones_like(q, "d")
 
-        R = _make_reflection_matrix(k_z_previous_layer, k_z_next_layer, current_roughness)
+        R = _make_reflection_matrix(
+            k_z_previous_layer, k_z_next_layer, current_roughness
+        )
 
         if interface == 0:
             M = R
@@ -44,7 +46,7 @@ def multilayer_reflectivity(q, thickness_layer, roughness_interface, SLD_layer):
                 M[:, :, n] = np.matmul(M[:, :, n], T[:, :, n])
                 M[:, :, n] = np.matmul(M[:, :, n], R[:, :, n])
 
-    r = np.zeros_like(q, 'D')
+    r = np.zeros_like(q, "D")
 
     for n in range(len(r)):
         r[n] = M[0, 1, n] / M[1, 1, n]
@@ -56,20 +58,27 @@ def multilayer_reflectivity(q, thickness_layer, roughness_interface, SLD_layer):
 
 
 def _get_k_z(k_z0, scattering_length_density):
-    k_z_rel = np.sqrt(np.clip(k_z0 ** 2 - 4 * np.pi * scattering_length_density, 0, None))
+    k_z_rel = np.sqrt(
+        np.clip(k_z0 ** 2 - 4 * np.pi * scattering_length_density, 0, None)
+    )
 
     return k_z_rel
 
 
 def _make_reflection_matrix(k_z_previous_layer, k_z_next_layer, interface_roughness):
-    p = (_safe_div(abs(k_z_previous_layer + k_z_next_layer), (2 * k_z_previous_layer))
-         * np.exp(-(k_z_previous_layer - k_z_next_layer) ** 2 * 0.5 * interface_roughness ** 2))
+    p = _safe_div(
+        abs(k_z_previous_layer + k_z_next_layer), (2 * k_z_previous_layer)
+    ) * np.exp(
+        -(k_z_previous_layer - k_z_next_layer) ** 2 * 0.5 * interface_roughness ** 2
+    )
 
-    m = (_safe_div(abs(k_z_previous_layer - k_z_next_layer), (2 * k_z_previous_layer))
-         * np.exp(-(k_z_previous_layer + k_z_next_layer) ** 2 * 0.5 * interface_roughness ** 2))
+    m = _safe_div(
+        abs(k_z_previous_layer - k_z_next_layer), (2 * k_z_previous_layer)
+    ) * np.exp(
+        -(k_z_previous_layer + k_z_next_layer) ** 2 * 0.5 * interface_roughness ** 2
+    )
 
-    R = np.array([[p, m],
-                  [m, p]])
+    R = np.array([[p, m], [m, p]])
 
     R = R + 1j * 0
 
@@ -77,14 +86,18 @@ def _make_reflection_matrix(k_z_previous_layer, k_z_next_layer, interface_roughn
 
 
 def _make_translation_matrix(k_z, thickness):
-    T = np.array([[np.exp(-1j * k_z * thickness), np.zeros_like(k_z)],
-                  [np.zeros_like(k_z), np.exp(1j * k_z * thickness)]])
+    T = np.array(
+        [
+            [np.exp(-1j * k_z * thickness), np.zeros_like(k_z)],
+            [np.zeros_like(k_z), np.exp(1j * k_z * thickness)],
+        ]
+    )
 
     return T
 
 
 def _safe_div(numerator, denominator):
-    result = np.zeros_like(numerator, 'D')
+    result = np.zeros_like(numerator, "D")
     length = len(numerator)
     for i in range(length):
 
