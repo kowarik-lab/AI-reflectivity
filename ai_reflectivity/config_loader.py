@@ -2,7 +2,11 @@ import configobj
 from pathlib import Path, PurePath
 
 """
-TODO: Something about singleton...
+This config loader is intended to be used as Singleton since
+it is accessed from different places within the project.
+
+Please try to use pathlib wherever possible to ensure compatibility with 
+Win/Mac/Linux
 """
 
 

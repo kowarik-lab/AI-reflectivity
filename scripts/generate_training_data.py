@@ -14,7 +14,12 @@ from ai_reflectivity.data_io import save_data_as_file, save_labels_as_file
 
 
 def main():
-    config = config_loader.config()
+    
+    # use given config-file if specified
+    if len(sys.argv)>1:
+        config = config_loader.config(sys.argv[1])
+    else:
+        config = config_loader.config()
     number_of_training_samples, number_of_validation_samples = (
         config.get_number_of_training_samples()
     )

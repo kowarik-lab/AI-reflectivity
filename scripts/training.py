@@ -15,7 +15,11 @@ from ai_reflectivity.data_handling import normalize_labels, remove_constant_labe
 
 
 def main():
-    config = config_loader.config()
+    # use given config-file if specified
+    if len(sys.argv)>1:
+        config = config_loader.config(sys.argv[1])
+    else:
+        config = config_loader.config()
 
     now = datetime.datetime.now()
 

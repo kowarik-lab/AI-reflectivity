@@ -16,8 +16,11 @@ from ai_reflectivity.data_handling import restore_labels
 
 def main():
     # load config
-    # TODO: pass config as argument
-    config = config_loader.config()
+    # use given config-file if specified
+    if len(sys.argv)>1:
+        config = config_loader.config(sys.argv[1])
+    else:
+        config = config_loader.config()
 
     # load the model
     model_file = config.get_model_file()
