@@ -1,0 +1,12 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: linux-64
+python >= 3.6.0
+black
+configobj
+jupyter
+keras
+numpy
+scipy
+tensorflow
+
