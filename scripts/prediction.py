@@ -1,33 +1,39 @@
 import numpy as np
-from scipy import stats
 import keras
-import reflectivity as refl
-import xrrplots
-import config_loader
-from tqdm import tqdm
 import time
-import csv
-import training
-import generate_training_data
 
-config = config_loader.ConfigLoader("organic.config")
+# to use code in ai_reflectivity without installing a package we add
+# the root of this git to sys.path
+import sys
+
+sys.path.append("..")
+
+
+from ai_reflectivity import xrrplots, neural_network, config_loader
+from ai_reflectivity.data_io import save_labels_as_file, save_data_as_file
+from ai_reflectivity.data_handling import restore_labels
 
 
 def main():
+    # load config
+    # TODO: pass config as argument
+    config = config_loader.config()
+
     # load the model
-    model_name = config.get_model_name()
-    # model_name = 'model_run1.hdf5'
+    model_file = config.get_model_file()
 
     custom_object_dict = dict(
-        [("abs_err_%d" % (i + 1), training.y_absolute_error(i + 1)) for i in range(4)]
+        [
+            ("abs_err_%d" % (i + 1), neural_network.y_absolute_error(i + 1))
+            for i in range(4)
+        ]
     )
-    custom_object_dict["abs_err"] = training.y_absolute_error(0)
-    model = keras.models.load_model(model_name, custom_objects=custom_object_dict)
+    custom_object_dict["abs_err"] = neural_network.y_absolute_error(0)
+    model = keras.models.load_model(str(model_file), custom_objects=custom_object_dict)
 
     # import your test data
-    path_test_data = config.get_test_data_file_name()
-    # path_test_data = 'interpolated_log_reflectivity_SLS_RT.txt'
-    test_data = np.loadtxt(path_test_data, delimiter="\t")
+    test_data_file = config.get_experimental_data_file()
+    test_data = np.loadtxt(test_data_file, delimiter="\t")
 
     q_vector = test_data[:, 0] * 1e10
     test_data = test_data[:, 1:]
@@ -52,7 +58,7 @@ def main():
     predicted_reflectivity = np.zeros([len(q_vector), number_of_curves + 1])
     predicted_reflectivity[:, 0] = q_vector
 
-    predicted_reflectivity = generate_training_data.make_reflectivity_curves(
+    predicted_reflectivity = neural_network.make_reflectivity_curves(
         q_vector, thicknesses, roughnesses, SLDs, number_of_curves
     )
 
@@ -60,8 +66,10 @@ def main():
         (np.reshape(q_vector, (q_vector.shape[0], 1)), predicted_reflectivity), axis=1
     )
 
-    save_predicted_labels_as_file(labels)
-    save_predicted_reflectivity_as_file(predicted_reflectivity)
+    prediction_files = config.get_prediction_files()
+
+    save_labels_as_file(labels, prediction_files[1])
+    save_data_as_file(predicted_reflectivity, prediction_files[0])
 
     total_prediction_time = time_after_prediction - time_before_prediction
     time_per_curve = total_prediction_time / number_of_curves
@@ -83,79 +91,6 @@ def main():
     )
 
     xrrplots.plot_SLD_vs_time(range(number_of_curves), SLDs[:, 0], output="show")
-
-
-def insert_oxide_thickness(path_train_data, labels):
-    train_data = np.loadtxt(path_train_data, skiprows=1)
-
-    labels = np.insert(labels, 1, train_data[:, 1])
-
-    return labels
-
-
-def restore_labels(labels):
-    min_thickness, max_thickness = config.get_thickness()
-    min_roughness, max_roughness = config.get_roughness()
-    min_scattering_length_density, max_scattering_length_density = (
-        config.get_scattering_length_density()
-    )
-
-    min_labels = min_thickness + min_roughness + min_scattering_length_density
-    max_labels = max_thickness + max_roughness + max_scattering_length_density
-
-    number_of_labels = len(max_labels)
-
-    for label in range(number_of_labels):
-        if min_labels[label] == max_labels[label]:
-            labels = np.insert(labels, label, max_labels[label], axis=1)
-        else:
-            labels[:, label] = (
-                labels[:, label] * (max_labels[label] - min_labels[label])
-                + min_labels[label]
-            )
-
-    restored_labels = labels
-
-    return restored_labels
-
-
-def save_predicted_labels_as_file(predicted_labels):
-    number_of_layers = int(predicted_labels.shape[1] / 3)
-
-    thickness_header = []
-    roughness_header = []
-    SLD_header = []
-
-    for i in range(number_of_layers):
-        layer = i + 1
-        thickness_header += ["Thickness {} [m]".format(layer)]
-        roughness_header += ["Roughness {} [m^2]".format(layer)]
-        SLD_header += ["Scattering length density {} [1/m^2]".format(layer)]
-
-    header = thickness_header + roughness_header + SLD_header
-
-    with open("prediction_labels.txt", "w", newline="") as f:
-
-        writer = csv.writer(f, dialect=csv.excel_tab)
-        writer.writerow(header)
-        writer.writerows(predicted_labels)
-
-
-def save_predicted_reflectivity_as_file(predicted_reflectivity):
-    number_of_samples = predicted_reflectivity.shape[1] - 1
-    header = []
-
-    for i in range(number_of_samples):
-        sample = i + 1
-        header += ["Reflectivity {}".format(sample)]
-
-    header = ["q [1/m]"] + header
-
-    with open("predictions.txt", "w", newline="") as f:
-
-        writer = csv.writer(f, dialect=csv.excel_tab)
-        writer.writerow(header)
-        writer.writerows(predicted_reflectivity)
 
 
 if __name__ == "__main__":
