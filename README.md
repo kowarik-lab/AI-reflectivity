@@ -11,7 +11,8 @@ Currently there are two ways to work with library:
 So far there is only a demo notebook that uses an already trained network to predict the relevant thin film properties.
 
 ### Live demo
-TODO link with mybinder.org
+For an online live demonstration using a pre-trained network have a look at
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kowarik-labs/AI-reflectivity/master?filepath=notebooks%2Fprediction_demo.ipynb)
 
 ### Run the code locally
 It is encouraged to use a conda environment with conda-forge as additional channel. All dependencies are listed in `requirements.txt`. To create a new enviroment on a system where conda is installed just pick a name for the new environement run the following commands in the anaconda prompt (windows) or in any terminal (linux, mac). If you prefere to use the Anaconda Navigator just have a look in `requirements.txt` and install the required packages from there.
