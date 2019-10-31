@@ -55,7 +55,7 @@ TODO: Explain structure of config file
     
    Fast Fitting of Reflectivity Data of Growing Thin Films Using Neural Networks A. Greco, V. Starostin, C. Karapanagiotis, A. Hinderhofer, A. Gerlach, L. Pithan, S. Liehr, F. Schreiber,  S. Kowarik (2019). J. Appl. Cryst. 
 
-- Cite via zenodo.org (TODO: add DOI once available)
+- Cite via zenodo.org: https://doi.org/10.5281/zenodo.3477582
 
 ## Authors
 - Alessandro Greco (Institut für Angewandte Physik, University of Tübingen)
