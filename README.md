@@ -1,5 +1,5 @@
 # AI-reflectivity
-`AI-reflectivity` is a code based on artificial neural networks trained with simulated reflectivity data that quickly predicts film parameters from experimental X-ray reflectivity curves. This project has a common root with (ML-reflectivity)[https://github.com/schreiber-lab/ML-reflectivity] and evolved in parallel. Both are linked to the follwoing publication:
+`AI-reflectivity` is a code based on artificial neural networks trained with simulated reflectivity data that quickly predicts film parameters from experimental X-ray reflectivity curves. In addition to downloading the code you can try the program without installing everything by clicking on the binder link below. This project has a common root with (ML-reflectivity)[https://github.com/schreiber-lab/ML-reflectivity] and evolved in parallel. Both are linked to the follwoing publication:
 
 Fast Fitting of Reflectivity Data of Growing Thin Films Using Neural Networks A. Greco, V. Starostin, C. Karapanagiotis, A. Hinderhofer, A. Gerlach, L. Pithan, S. Liehr, F. Schreiber,  S. Kowarik (2019). J. Appl. Cryst. 
 
@@ -13,6 +13,7 @@ So far there is only a demo notebook that uses an already trained network to pre
 ### Live demo
 For an online live demonstration using a pre-trained network have a look at
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/kowarik-labs/AI-reflectivity/master?filepath=notebooks%2Fprediction_demo.ipynb)
+You can upload your own files and try the neural network we trained for XRR data of organic molecular layers (20 - 300 Angstrom thick) on silicon with native oxide.
 
 ### Run the code locally
 It is encouraged to use a conda environment with conda-forge as additional channel. All dependencies are listed in `requirements.txt`. To create a new enviroment on a system where conda is installed just pick a name for the new environement run the following commands in the anaconda prompt (windows) or in any terminal (linux, mac). If you prefere to use the Anaconda Navigator just have a look in `requirements.txt` and install the required packages from there.
