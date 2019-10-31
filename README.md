@@ -1,12 +1,13 @@
 # AI-reflectivity
-`AI-reflectivity` is a code based on artificial neural networks trained with simulated reflectivity data that quickly predicts film parameters from experimental X-ray reflectivity curves. In addition to downloading the code you can try the program without installing everything by clicking on the binder link below. This project has a common root with (ML-reflectivity)[https://github.com/schreiber-lab/ML-reflectivity] and evolved in parallel. Both are linked to the follwoing publication:
+`AI-reflectivity` is a code based on artificial neural networks trained with simulated reflectivity data that quickly predicts film parameters from experimental X-ray reflectivity curves. In addition to downloading the code you can try the program without installing anything by clicking on the binder link below. 
 
+This project has a common root with (ML-reflectivity)[https://github.com/schreiber-lab/ML-reflectivity] and evolved in parallel. Both are linked to the follwoing publication:
 Fast Fitting of Reflectivity Data of Growing Thin Films Using Neural Networks A. Greco, V. Starostin, C. Karapanagiotis, A. Hinderhofer, A. Gerlach, L. Pithan, S. Liehr, F. Schreiber,  S. Kowarik (2019). J. Appl. Cryst. 
 
 ## How to use AI-reflectivity
 Currently there are two ways to work with library:
 1) plain python scripts
-2) jupyter notebooks
+2) jupyter notebooks (demo available by clicking on the mybinder link below)
 
 So far there is only a demo notebook that uses an already trained network to predict the relevant thin film properties.
 
